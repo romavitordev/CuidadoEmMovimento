@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { DM_Serif_Display, Manrope, Parisienne } from "next/font/google";
 import { marca } from "@/lib/marca";
 import { whatsappConfigurado } from "@/lib/whatsapp";
+
+const vitrine = process.env.NEXT_PUBLIC_VITRINE === "1";
 import "./globals.css";
 
 // next/font baixa as fontes no build e serve do próprio domínio (sem request ao Google, sem CLS)
@@ -18,14 +20,16 @@ export const metadata: Metadata = {
   },
   description: marca.descricaoSeo,
   applicationName: marca.nome,
-  alternates: { canonical: "/" },
+  alternates: { canonical: `${marca.siteUrl}/` },
+  // Vitrine (espelho no GitHub Pages) não deve competir com o domínio real no Google
+  ...(vitrine && { robots: { index: false, follow: false } }),
   openGraph: {
     type: "website",
     locale: "pt_BR",
     siteName: marca.nome,
     title: `${marca.nome} · ${marca.slogan}`,
     description: marca.descricaoSeo,
-    url: "/",
+    url: `${marca.siteUrl}/`,
   },
   twitter: { card: "summary_large_image", title: marca.nome, description: marca.slogan },
   formatDetection: { telephone: false },

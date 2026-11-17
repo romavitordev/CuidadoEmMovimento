@@ -1,4 +1,5 @@
 import { Logo } from "@/components/Logo";
+import Link from "next/link";
 
 export default function NaoEncontrada() {
   return (
@@ -9,9 +10,9 @@ export default function NaoEncontrada() {
         </div>
         <h1>Esse caminho não existe.</h1>
         <p style={{ marginBottom: 32 }}>Mas a gente leva você de volta ao lugar certo.</p>
-        <a href="/" className="botao botao--azul">
+        <Link href="/" className="botao botao--azul">
           Voltar para a página inicial
-        </a>
+        </Link>
       </div>
     </main>
   );

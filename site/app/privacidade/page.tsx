@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Logo } from "@/components/Logo";
 import { marca, pendente } from "@/lib/marca";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Política de Privacidade",
   description: `Como o ${marca.nome} trata as informações recebidas pelo site e pelo WhatsApp.`,
-  alternates: { canonical: "/privacidade" },
+  alternates: { canonical: `${marca.siteUrl}/privacidade` },
 };
 
 // Modelo inicial: revisar com assessoria jurídica antes de publicar.
@@ -16,9 +17,9 @@ export default function Privacidade() {
   return (
     <main className="pagina-simples">
       <div className="container">
-        <a href="/" aria-label="Voltar para a página inicial" style={{ display: "inline-block", marginBottom: 40 }}>
+        <Link href="/" aria-label="Voltar para a página inicial" style={{ display: "inline-block", marginBottom: 40 }}>
           <Logo />
-        </a>
+        </Link>
         <h1>Política de Privacidade</h1>
         <p>
           Esta política explica como o {marca.nome} trata as informações que você compartilha com a gente pelo site e
@@ -54,9 +55,9 @@ export default function Privacidade() {
         <h2>Cookies</h2>
         <p>Este site não utiliza cookies de publicidade nem ferramentas de rastreamento de terceiros.</p>
         <p style={{ marginTop: 40 }}>
-          <a href="/" className="link-seta">
+          <Link href="/" className="link-seta">
             Voltar para a página inicial
-          </a>
+          </Link>
         </p>
       </div>
     </main>

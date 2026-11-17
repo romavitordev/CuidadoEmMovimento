@@ -9,6 +9,7 @@ import { WhatsappFlutuante } from "@/components/WhatsappFlutuante";
 import { diferenciais, etapas, incluso, outrosDestinos, perguntas, servicos } from "@/lib/conteudo";
 import { marca, pendente } from "@/lib/marca";
 import { linkInstagram, linkWhatsapp, whatsappConfigurado } from "@/lib/whatsapp";
+import Link from "next/link";
 
 export default function Home() {
   const wa = linkWhatsapp();
@@ -355,7 +356,7 @@ export default function Home() {
             <a href="#como-funciona">Como funciona</a>
             <a href="#equipe">Equipe</a>
             <a href="#contato">Contato</a>
-            <a href="/privacidade">Política de Privacidade</a>
+            <Link href="/privacidade">Política de Privacidade</Link>
           </nav>
           <p className="rodape__aviso">
             Serviço de transporte e companhia para idosos. Não prestamos atendimento médico, de enfermagem ou de remoção.

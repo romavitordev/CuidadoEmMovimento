@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { Icone } from "./Icone";
+import Link from "next/link";
 
 /**
  * O formulário NÃO envia nada para servidor: ele monta uma mensagem e abre o
@@ -134,7 +135,7 @@ export function FormularioContato({ numero }: { numero: string }) {
         <input type="checkbox" name="consentimento" required />
         <span>
           Concordo em enviar estas informações pelo WhatsApp para o agendamento, conforme a{" "}
-          <a href="/privacidade">Política de Privacidade</a>.
+          <Link href="/privacidade">Política de Privacidade</Link>.
         </span>
       </label>
 

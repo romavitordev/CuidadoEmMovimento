@@ -1,6 +1,9 @@
 import { ImageResponse } from "next/og";
 import { marca } from "@/lib/marca";
 
+// Gerado no build (necessário para o export estático da vitrine)
+export const dynamic = "force-static";
+
 export const alt = `${marca.nome} · ${marca.slogan}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
