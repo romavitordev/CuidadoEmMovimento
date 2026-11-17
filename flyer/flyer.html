@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=794">
+<title>Flyer · Cuidado em Movimento</title>
+<!--
+  FLYER A4 (210 × 297 mm) — Cuidado em Movimento
+  ------------------------------------------------
+  1. Edite o bloco CONFIG logo abaixo (WhatsApp, Instagram, foto).
+  2. Gere os arquivos finais com:  node exportar.mjs
+     → exportados/flyer-a4-300dpi.png (2480 × 3508 px, para gráfica/impressão)
+       exportados/flyer-a4-digital.png (1240 × 1754 px, leve, para WhatsApp e redes)
+       exportados/flyer-a4.pdf (A4 vetorial, texto nítido em qualquer tamanho)
+-->
+<script>
+  const CONFIG = {
+    whatsapp: "",   // como deve aparecer, ex.: "(11) 99999-9999"
+    instagram: "",  // sem @, ex.: "cuidadoemmovimento"
+    foto: "",       // caminho da foto da equipe com a cliente, ex.: "fotos/equipe.jpg" (formato retrato)
+  };
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@500;600;700;800&family=Parisienne&display=block" rel="stylesheet">
+<style>
+  :root {
+    --azul: #102B4C; --azul-2: #284B70; --ouro: #E9A52B; --ouro-tinta: #8A5A0B;
+    --creme: #FFF6E9; --branco: #FFFFFF; --tinta-suave: #4A5B70; --creme-suave: #C9D3DF;
+  }
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #e9e3d8; }
+  body { width: 794px; min-height: 1123px; overflow: hidden; }
+  body { font-family: "Manrope", sans-serif; color: var(--azul); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @media print { html, body { background: none; } }
+
+  .folha {
+    position: relative; width: 794px; height: 1123px; overflow: hidden; margin: 0;
+    background:
+      radial-gradient(55% 35% at 92% 6%, rgba(233,165,43,.20), transparent 70%),
+      radial-gradient(40% 30% at 0% 55%, rgba(40,75,112,.07), transparent 70%),
+      var(--creme);
+  }
+  .caminho { position: absolute; inset: 0; pointer-events: none; }
+
+  /* topo */
+  .topo { position: absolute; left: 56px; right: 56px; top: 44px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: flex; align-items: center; gap: 14px; }
+  .logo svg.simbolo { width: 92px; height: auto; }
+  .logo .div { width: 2px; align-self: stretch; margin: 8px 0; background: var(--ouro); border-radius: 2px; }
+  .logo .nome { position: relative; font-family: "DM Serif Display", serif; font-size: 30px; line-height: .95; padding-bottom: 10px; white-space: nowrap; }
+  .logo .nome em { color: var(--ouro-tinta); }
+  .logo .traco { position: absolute; left: 0; bottom: 0; width: 108%; height: 7px; }
+  .selo { font-size: 11.5px; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; color: var(--ouro-tinta); text-align: right; line-height: 1.6; }
+
+  /* título */
+  .titulo { position: absolute; left: 56px; right: 56px; top: 150px; font-family: "DM Serif Display", serif; font-size: 56px; line-height: 1.02; letter-spacing: -.01em; }
+  .titulo em { color: var(--ouro-tinta); }
+
+  /* foto */
+  .foto-wrap { position: absolute; left: 70px; top: 364px; width: 342px; height: 430px; }
+  .foto-wrap::before { content: ""; position: absolute; inset: -14px 14px 14px -14px; border: 2.5px solid var(--ouro); border-radius: 999px 999px 26px 26px; opacity: .8; }
+  .foto { position: absolute; inset: 0; border-radius: 999px 999px 26px 26px; overflow: hidden; background: linear-gradient(165deg, #1b3b62 0%, var(--azul) 70%); box-shadow: 0 30px 60px -24px rgba(16,43,76,.45); }
+  .foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .foto .esboco { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .foto .brilho { position: absolute; inset: 0; background: radial-gradient(70% 45% at 50% 18%, rgba(233,165,43,.22), transparent 70%); }
+  .aviso-foto { position: absolute; left: 50%; top: 21%; transform: translate(-50%, -50%); display: flex; gap: 8px; align-items: center; padding: 8px 12px; border-radius: 12px; background: rgba(255,246,233,.95); font-size: 10.5px; line-height: 1.3; white-space: nowrap; }
+  .aviso-foto b { display: block; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ouro-tinta); }
+  .aviso-foto svg { width: 18px; height: 18px; color: var(--ouro-tinta); }
+
+  /* coluna direita */
+  .direita { position: absolute; left: 446px; right: 56px; top: 360px; }
+  .descricao { font-size: 19px; line-height: 1.5; font-weight: 600; color: var(--azul); }
+  .descricao strong { color: var(--ouro-tinta); font-weight: 800; }
+  .difs { margin-top: 24px; display: grid; gap: 12px; }
+  .dif { display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: var(--branco); border-radius: 18px; box-shadow: 0 1px 2px rgba(16,43,76,.06), 0 10px 24px -14px rgba(16,43,76,.25); }
+  .dif .ic { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 14px; background: var(--azul); color: var(--ouro); }
+  .dif .ic svg { width: 24px; height: 24px; }
+  .dif span { font-size: 16.5px; font-weight: 800; line-height: 1.25; }
+
+  /* destinos */
+  .destinos { position: absolute; left: 56px; right: 56px; top: 818px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .destinos p { width: 100%; margin-bottom: 4px; }
+  .destinos p { font-size: 11.5px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--ouro-tinta); margin-right: 6px; }
+  .destinos span { font-size: 14.5px; font-weight: 700; padding: 6px 13px; border-radius: 999px; border: 1.5px solid rgba(16,43,76,.18); background: var(--branco); }
+
+  /* rodapé azul */
+  .base { position: absolute; left: 0; right: 0; bottom: 0; height: 220px; background: var(--azul); color: var(--creme); padding: 38px 56px 0; overflow: hidden; }
+  .base::before { content: ""; position: absolute; right: -90px; top: -120px; width: 300px; height: 300px; border-radius: 50%; border: 2px solid rgba(233,165,43,.28); }
+  .cta { font-family: "DM Serif Display", serif; font-size: 33px; line-height: 1.1; max-width: 440px; }
+  .cta em { color: var(--ouro); }
+  .contatos { display: flex; gap: 18px; margin-top: 22px; }
+  .contato { display: flex; align-items: center; gap: 12px; padding: 12px 18px 12px 12px; border-radius: 999px; background: rgba(255,246,233,.08); border: 1.5px solid rgba(255,246,233,.14); }
+  .contato.principal { background: var(--ouro); color: var(--azul); border-color: var(--ouro); }
+  .contato .ic { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--azul); color: var(--creme); }
+  .contato:not(.principal) .ic { background: rgba(255,246,233,.1); color: var(--ouro); }
+  .contato .ic svg { width: 21px; height: 21px; }
+  .contato small { display: block; font-size: 10px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
+  .contato b { font-size: 19px; font-weight: 800; }
+  .contato b.pendente { font-size: 14px; letter-spacing: .02em; }
+  .assinatura { position: absolute; right: 56px; top: 40px; text-align: right; line-height: 1.15; font-family: "Parisienne", cursive; font-size: 30px; color: var(--ouro); }
+</style>
+</head>
+<body>
+<div class="folha" id="folha">
+  <!-- linha-caminho dourada -->
+  <svg class="caminho" viewBox="0 0 794 1123" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M-20 300C160 300 260 250 420 226S700 170 820 120" fill="none" stroke="#E9A52B" stroke-width="2" stroke-linecap="round" opacity=".5"/>
+  </svg>
+
+  <header class="topo">
+    <div class="logo">
+      <svg class="simbolo" viewBox="0 0 120 104" fill="none" aria-hidden="true">
+        <path d="M24 72C9 58 5 36 18 24 30 13 47 17 56 31 64 15 86 9 100 21 113 33 108 55 97 66" stroke="#E9A52B" stroke-width="7" stroke-linecap="round"/>
+        <path d="M22 64V56Q22 50.5 27 48.5L31 40Q32.5 37 36 37H44Q47.5 37 49 40L53 48.5Q58 50.5 58 56V64Z" fill="#102B4C"/>
+        <rect x="24" y="61" width="7" height="8" rx="2" fill="#102B4C"/><rect x="49" y="61" width="7" height="8" rx="2" fill="#102B4C"/>
+        <path d="M31.5 47.5 34.4 41.3Q35 40.2 36.4 40.2H43.6Q45 40.2 45.6 41.3L48.5 47.5Z" fill="#FFF6E9"/>
+        <rect x="25" y="53" width="6.5" height="3.2" rx="1.6" fill="#FFF6E9"/><rect x="48.5" y="53" width="6.5" height="3.2" rx="1.6" fill="#FFF6E9"/>
+        <circle cx="70" cy="32" r="6.2" fill="#102B4C"/><path d="M61 66V52Q61 41.5 70 41.5 79 41.5 79 52V66Z" fill="#102B4C"/>
+        <circle cx="88.5" cy="42" r="5" fill="#102B4C"/><path d="M82 66V56.5Q82 49.5 88.5 49.5 95 49.5 95 56.5V66Z" fill="#102B4C"/>
+        <path d="M6 96C26 76 54 68 108 67 66 72 42 82 26 98Z" fill="#102B4C"/>
+        <path d="M30 101C50 84 80 75 116 72 84 78 62 88 48 103Z" fill="#E9A52B"/>
+      </svg>
+      <span class="div"></span>
+      <span class="nome">Cuidado<br><em>em</em> Movimento
+        <svg class="traco" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 8C60 2 140 1 198 6 140 4 70 5 2 8Z" fill="#E9A52B"/></svg>
+      </span>
+    </div>
+    <p class="selo">Transporte e<br>companhia para idosos</p>
+  </header>
+
+  <h1 class="titulo">Mais que transporte,<br>uma <em>companhia</em> em<br>todas as ocasiões.</h1>
+
+  <div class="foto-wrap">
+    <div class="foto" id="foto">
+      <!-- esboço da composição (some quando CONFIG.foto é preenchido) -->
+      <div class="brilho"></div>
+      <svg class="esboco" viewBox="0 0 400 500" preserveAspectRatio="xMidYMax slice" aria-hidden="true"><g><path d="M202.5 520 L202.5 243.95 C202.5 218.96 225.11 214.2 242.96 214.2 L281.04 214.2 C298.89 214.2 321.5 218.96 321.5 243.95 L321.5 520 Z" fill="#284B70" stroke="rgba(255,246,233,.28)" stroke-width="1.5"/><circle cx="262" cy="170" r="34" fill="#EFD9BC"/><path d="M228 168.3 C226.3 129.2 297.7 129.2 296 168.3 C282.4 153 241.6 153 228 168.3 Z" fill="#0A1A2E" stroke="rgba(255,246,233,.35)" stroke-width="1.5"/></g><g><path d="M41.04 264.1 C33.45 201.4 48.3 166.75 78 168.4 C107.7 166.75 122.55 201.4 114.96 264.1 Z" fill="#E2B35A"/><path d="M20.25 520 L20.25 279.78 C20.25 255.52 42.2 250.9 59.52 250.9 L96.48 250.9 C113.8 250.9 135.75 255.52 135.75 279.78 L135.75 520 Z" fill="#284B70" stroke="rgba(255,246,233,.28)" stroke-width="1.5"/><circle cx="78" cy="208" r="33" fill="#EFD9BC"/><path d="M44.34 206.35 C48.3 173.35 84.6 165.1 111.66 201.4 C91.2 189.85 68.1 189.85 44.34 206.35 Z" fill="#E2B35A"/></g><g><path d="M302.16 272.4 C294.8 211.6 309.2 178 338 179.6 C366.8 178 381.2 211.6 373.84 272.4 Z" fill="#E2B35A"/><path d="M282 520 L282 287.6 C282 264.08 303.28 259.6 320.08 259.6 L355.92 259.6 C372.72 259.6 394 264.08 394 287.6 L394 520 Z" fill="#284B70" stroke="rgba(255,246,233,.28)" stroke-width="1.5"/><circle cx="338" cy="218" r="32" fill="#EFD9BC"/><path d="M305.36 216.4 C309.2 184.4 344.4 176.4 370.64 211.6 C350.8 200.4 328.4 200.4 305.36 216.4 Z" fill="#E2B35A"/></g><g><path d="M117.25 520 L117.25 339.78 C117.25 315.52 139.2 310.9 156.52 310.9 L193.48 310.9 C210.8 310.9 232.75 315.52 232.75 339.78 L232.75 520 Z" fill="#284B70" stroke="rgba(255,246,233,.28)" stroke-width="1.5"/><circle cx="175" cy="268" r="33" fill="#EFD9BC"/><path d="M139.36 272.95 C133.75 230.05 216.25 230.05 210.64 272.95 C198.1 254.8 151.9 254.8 139.36 272.95 Z" fill="#E7E2D9"/></g></svg>
+      <div class="aviso-foto">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3.5"/></svg>
+        <span><b>Espaço para fotografia</b>Equipe com uma cliente</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="direita">
+    <p class="descricao">Transporte e acompanhamento para idosos em <strong>passeios, compras, visitas, consultas</strong> e muito mais.</p>
+    <ul class="difs" style="list-style:none">
+      <li class="dif"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></span><span>Companhia em todo o trajeto</span></li>
+      <li class="dif"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg></span><span>Segurança e conforto</span></li>
+      <li class="dif"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M11 14h2a2 2 0 1 0 0-4h-3c-.6 0-1.1.2-1.4.6L3 16"/><path d="m7 20 1.6-1.4c.3-.4.8-.6 1.4-.6h4c1.1 0 2.1-.4 2.8-1.2l4.6-4.4a2 2 0 0 0-2.75-2.91l-4.2 3.9M2 15l6 6"/><path d="M19.5 8.5c.7-.7 1.5-1.6 1.5-2.7A2.6 2.6 0 0 0 18.3 3c-.8 0-1.4.3-2.1 1-.7-.7-1.3-1-2.1-1a2.6 2.6 0 0 0-2.6 2.8c0 1.1.8 2 1.5 2.7l3.2 3.2Z"/></svg></span><span>Atendimento humanizado</span></li>
+      <li class="dif"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><span>Pontualidade e atenção</span></li>
+    </ul>
+  </div>
+
+  <div class="destinos">
+    <p>Você escolhe o destino</p>
+    <span>Consultas</span><span>Passeios</span><span>Compras</span><span>Visitas</span><span>Restaurantes</span><span>Eventos</span>
+  </div>
+
+  <footer class="base">
+    <p class="cta">Entre em contato e <em>agende</em> seu atendimento!</p>
+    <div class="contatos">
+      <div class="contato principal">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.88-.79-1.48-1.76-1.66-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35M12.05 21.5h-.01a9.4 9.4 0 0 1-4.8-1.32l-.34-.2-3.57.94.95-3.48-.22-.36a9.4 9.4 0 0 1-1.44-5.02c0-5.2 4.24-9.43 9.44-9.43 2.52 0 4.89.98 6.67 2.77a9.37 9.37 0 0 1 2.76 6.67c0 5.2-4.23 9.43-9.44 9.43m8.03-17.46A11.27 11.27 0 0 0 12.05.7C5.8.7.7 5.8.7 12.05c0 2 .52 3.95 1.52 5.67L.6 23.6l6.02-1.58a11.33 11.33 0 0 0 5.42 1.38h.01c6.25 0 11.34-5.09 11.35-11.35 0-3.03-1.18-5.88-3.32-8.02"/></svg></span>
+        <span><small>WhatsApp</small><b id="whatsapp">[INSERIR CONTATO]</b></span>
+      </div>
+      <div class="contato">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="2.5" width="19" height="19" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg></span>
+        <span><small>Instagram</small><b id="instagram">[INSERIR PERFIL]</b></span>
+      </div>
+    </div>
+    <p class="assinatura">Cuidado que<br>acompanha. Sempre.</p>
+  </footer>
+</div>
+<script>
+  // aplica o CONFIG
+  const w = document.getElementById("whatsapp"), i = document.getElementById("instagram");
+  if (CONFIG.whatsapp) w.textContent = CONFIG.whatsapp; else w.classList.add("pendente");
+  if (CONFIG.instagram) i.textContent = "@" + CONFIG.instagram.replace(/^@/, ""); else i.classList.add("pendente");
+  if (CONFIG.foto) {
+    const f = document.getElementById("foto");
+    f.innerHTML = "";
+    const img = new Image();
+    img.src = CONFIG.foto;
+    img.alt = "Equipe Cuidado em Movimento com uma cliente";
+    f.appendChild(img);
+  }
+</script>
+</body>
+</html>
