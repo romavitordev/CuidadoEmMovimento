@@ -21,6 +21,8 @@ npm run typecheck
 
 Deploy recomendado: Vercel (importar a pasta `site/` e definir `NEXT_PUBLIC_SITE_URL`). Como todas as páginas são estáticas, funciona também em qualquer hospedagem Node.
 
+**Vitrine:** o repositório `layout_cuidadoemmovimento` é o espelho estático publicado em https://romavitordev.github.io/layout_cuidadoemmovimento/. Ele tem o mesmo código de `site/` e muda só no `next.config.ts` (`output: 'export'`, `basePath` e `NEXT_PUBLIC_VITRINE=1`, que coloca `noindex`). Ao alterar o site aqui, copie as mudanças para lá.
+
 ## Onde editar
 
 | O quê | Arquivo |
